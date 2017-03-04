@@ -7,7 +7,7 @@ Dir.mkdir TMP
 
 def ecmd(str)
   unless system "#{str} > #{TMP}/stdout.log 2> #{TMP}/stderr.log"
-    puts %(\{\{raise "EXTBUILDER : #{str} failed"\}\})
+    puts "EXTBUILDER : #{str} failed"
     exit 2
   end
 end
@@ -15,6 +15,7 @@ end
 def build(i, o, s)
   namet = s ? "**/*.a" : "**/*.so"
   o = File.expand_path o
+  Dir.mkdir_p o
   files = [] of String
   Dir.cd i do
     if File.exists? "Extfile"
@@ -39,7 +40,7 @@ def build(i, o, s)
         FileUtils.cp f, o
       end
     else
-      puts %(\{\{raise "EXTBUILDER : Cannot found recipe for #{i}"\}\})
+      puts "EXTBUILDER : Cannot found recipe for #{i}"
       exit 1
     end
   end
