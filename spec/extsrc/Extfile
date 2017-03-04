@@ -1,0 +1,10 @@
+require "file_utils"
+
+system "make >> log.log"
+files = [] of String
+Dir.glob(ExtBuilder.format == :static ? "**/*.a" : "**/*.o") do |f|
+  files << File.basename f
+  FileUtils.cp f, ExtBuilder.output
+end
+
+files.each{ |f| puts f }
