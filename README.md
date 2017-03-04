@@ -23,7 +23,7 @@ lib StaticLib
 end
 ```
 
-Cmake is supported, as well as plain makefiles. There is also a thing called "Extfile" : a crystal program compiled with [this file](src/extbuilder/extb_ext.cr) as prelude.
+Cmake is supported, as well as plain makefiles. There is also a thing called "Extfile" : a crystal program compiled with [this file](src/extbuilder/ext_prelude/extb_prelude.cr) as prelude.
 
 See example in spec directory.
 
