@@ -1,9 +1,10 @@
 require "option_parser"
 require "file_utils"
 
-PRELUDE = "#{__DIR__}/extb_ext.cr"
+PRELUDE = "extbuilder_prelude"
 TMP = "/tmp/extbuilder-#{Time.now.epoch_ms}"
 Dir.mkdir TMP
+CRYSTAL_PATH = `crystal env CRYSTAL_PATH`
 
 def ecmd(str)
   unless system "#{str} > #{TMP}/stdout.log 2> #{TMP}/stderr.log"
@@ -20,8 +21,8 @@ def build(i, o, s)
   Dir.cd i do
     if File.exists? "Extfile"
       fmt = s ? "static" : "shared"
-      ecmd "crystal run Extfile --prelude \"#{PRELUDE}\" -- --output #{o} --format #{fmt}"
-      files = File.read(File.join(TMP,"stderr.log")).split("\n")
+      ecmd "CRYSTAL_PATH=#{__DIR__}/ext_prelude:#{CRYSTAL_PATH} crystal run Extfile --prelude \"#{PRELUDE}\" -- --output #{o} --format #{fmt}"
+      files = File.read(File.join(TMP,"stdout.log")).chomp.split("\n")
     elsif File.exists? "CMakeLists.txt"
       Dir.mkdir "build" unless File.exists? "build"
       Dir.cd "build" do
